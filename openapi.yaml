@@ -1,4 +1,4 @@
-openapi: 3.0.1
+``openapi: 3.0.1
 info:
   title: WASL Admin Panle APIs
   description: "For this API, you need `Jwt` token in `Authorization` header, for authorization purposes. Example: `Authorization: Bearer <token>`"
