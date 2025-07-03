@@ -54,8 +54,8 @@ async function sendResetEmail(name, to, subject, message, url) {
         port: 587,
         secure: false,
         auth: {
-            user: 'postmaster@sandbox517bdacb18b24aa9940b52165a7bc888.mailgun.org',
-            pass: 'a1d90d75b76874610d768de661e0250b-6d1c649a-b8b7374a'
+            user: '',
+            pass: ''
         }
     };
 
