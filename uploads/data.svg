@@ -1,0 +1,7 @@
+<svg width="200" height="200" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="512" cy="512" r="512" fill="#FFF8DC"></circle>
+  <path d="M680 640H344c-22 0-40-18-40-40V424c0-22 18-40 40-40h336c22 0 40 18 40 40v176c0 22-18 40-40 40z" fill="#FDE68A"></path>
+  <path d="M344 408h336v24H344zm0 56h336v24H344zm0 56h216v24H344z" fill="#F59E0B"></path>
+  <circle cx="512" cy="512" r="200" stroke="#FACC15" stroke-width="20" stroke-dasharray="15 15"></circle>
+  <text x="50%" y="82%" text-anchor="middle" fill="#555" font-size="28px" font-family="sans-serif">No Requests Found</text>
+</svg>

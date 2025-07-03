@@ -1,0 +1,153 @@
+{
+    "register" : {
+        "full_name" : {
+            "string.empty" : {
+                "en" : "Full Name is Required"
+            },
+            "string.min" : {
+                "en" : "Full Name length cannot be less than 5 characters."
+            },
+            "string.max" : {
+                "en" : "Full Name length cannot be greater than 30 characters."
+            }
+        },
+        "email" : {
+            "string.empty" : {
+                "en" : "Email is Required"
+            },
+            "string.email" : {
+                "en" : "Please enter a valid email address."
+            }
+        },
+        "password" : {
+            "string.empty" : {
+                "en" : "Password is Required"
+            },
+            "string.min" : {
+                "en" : "Password length cannot be less than 8 characters."
+            }
+        },
+        "password_confirmation" : {
+            "any.only" : {
+                "en" : "Your password do not match."
+            }
+        },
+        "privacy_policy" : {
+            "agreeed" : {
+                "en" : "You must agree to the terms and conditions."
+            }
+        }
+    },
+    "login" : {
+        "email" : {
+            "string.empty" : {
+                "en" : "You cannot leave this field blank."
+            },
+            "string.email" : {
+                "en" : "Please enter a valid email address."
+            }
+        },
+        "password" : {
+            "string.empty" : {
+                "en" : "Password is Required"
+            },
+            "invalid" : {
+                "en" : "Your username or password is invalid."
+            },
+            "any.required" : {
+                "en" : "Password is Required"
+            }
+        }
+    },
+    "forgot_password" : {
+        "email" : {
+            "string.empty" : {
+                "en" : "You cannot leave this field blank."
+            },
+            "string.email" : {
+                "en" : "Please enter a valid email address."
+            }
+        }
+    },
+    "phone_verification" : {
+        "phone" : {
+            "phoneNumber.invalid" : {
+                "en" : "Please enter a valid phone number."
+            },
+            "string.empty" : {
+                "en" : "Mobile Number is Required"
+            },
+            "already.exists" : {
+                "en" : "A user with this account already exists."
+            }
+        },
+        "code" : {
+            "string.empty" : {
+                "en" : "OTP Code is Required"
+            },
+            "string.min" : {
+                "en" : "OTP incorrect. Please enter a valid OTP."
+            },
+            "string.max" : {
+                "en" : "OTP incorrect. Please enter a valid OTP."
+            }
+        }
+
+    },
+    "cart" : {
+        "promo_code" : {
+            "invalid" : {
+                "en" : "Promo code entered is claimed or invalid."
+            }
+        },
+        "checkout_details" : {
+            "id" : {
+                "string.empty" : {
+                    "en" : "Shipping Id is required"
+                },
+                "string.min" : {
+                    "en" : "Shipping Id length cannot be less than 24 characters."
+                },
+                "string.max" : {
+                    "en" : "Shipping Id length cannot be greater than 24 characters."
+                }
+            },
+            "scheduled" : {
+                "string.empty" : {
+                    "en" : "Scheduled is required"
+                }
+            },
+            "delivery_date" : {
+                "string.empty" : {
+                    "en" : "Delivery date is required"
+                }
+            },
+            "delivery_time" : {
+                "string.empty" : {
+                    "en" : "Delivery time is required"
+                }
+            },
+            "name" : {
+                "string.empty" : {
+                    "en" : "Name is required"
+                }
+            },
+            "phone" : {
+                "string.empty" : {
+                    "en" : "Phone number is required"
+                }
+            },
+            "email" : {
+                "string.empty" : {
+                    "en" : "Email address is required"
+                },
+                "string.email" : {
+                    "en" : "Please enter a valid email address."
+                }
+            }
+        }
+    },
+    "default" : {
+        "en" : "Something went wrong"
+    }
+}

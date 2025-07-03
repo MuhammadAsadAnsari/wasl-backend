@@ -1,0 +1,10 @@
+{
+    "secret": "!@#@#@!#!@*)*ABCSDHDHDHHDH(*)@!#(!@#*)(*)!@*#JWQJEWELJEKLJQWKLEJLKQWJEKLQWJE@!#)(@!*#*)!@#*)!@*#)!@#",
+    "MONGO_URL": "mongodb+srv://waslUser:QRt0GFnxLqlT2u8s@cluster0.u6hylkt.mongodb.net/wasl?retryWrites=true&w=majority&appName=Cluster0",
+    "host_name": "127.0.0.1",
+    "host_name_local": "127.0.0.1",
+    "port": "30001",
+    "HTTP": "http://",
+    "URL":"https://127.0.0.1:30000/",
+    "JWT_expire_time" : "100000000000s"
+}

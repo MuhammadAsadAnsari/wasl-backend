@@ -1,0 +1,53 @@
+{
+  "name": "wasl_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "author": "OK",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "amqplib": "^0.10.3",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "ejs": "^3.1.8",
+    "enum": "^3.0.4",
+    "express": "^4.18.2",
+    "express-jwt": "^8.3.0",
+    "express-session": "^1.17.3",
+    "firebase-admin": "^11.5.0",
+    "git": "^0.1.5",
+    "google-auth-library": "^8.7.0",
+    "handlebars": "^4.7.7",
+    "joi": "^17.13.3",
+    "joi-objectid": "^4.0.2",
+    "joi-phone-number": "^5.1.1",
+    "jose": "^4.11.2",
+    "jquery": "^3.6.3",
+    "jsonwebtoken": "^9.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "mongodb": "^4.13.0",
+    "multer": "^1.4.4",
+    "nodemailer": "^6.9.0",
+    "nodemon": "^2.0.20",
+    "order-id": "^2.1.2",
+    "stripe": "^12.3.0",
+    "swagger-ui-express": "^4.6.0",
+    "taxjar": "^4.0.1",
+    "uuid": "^9.0.0",
+    "verify-apple-id-token": "^3.0.1",
+    "xss": "^1.0.14",
+    "yamjs": "^0.6.11",
+    "yamljs": "^0.3.0"
+  },
+  "directories": {
+    "doc": "docs"
+  }
+}

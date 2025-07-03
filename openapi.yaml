@@ -1,0 +1,1030 @@
+openapi: 3.0.1
+info:
+  title: WASL Admin Panle APIs
+  description: "For this API, you need `Jwt` token in `Authorization` header, for authorization purposes. Example: `Authorization: Bearer <token>`"
+  contact:
+    email: omer.akram2012@gmail.com
+  version: 1.0.0
+externalDocs:
+  description: ""
+  url: ""
+servers:
+  - url: "http://127.0.0.1:30001/"
+    description: localhost server
+  - url: "http://178.18.251.52:30001/"
+    description: localhost server
+
+tags:
+  - name: User
+    description: "Operations about user"
+  - name: Token
+  - name: Files
+  - name: Categories
+  - name: Visitor
+
+paths:
+
+  /user:
+    get:
+      tags:
+        - User
+      operationId: /user
+      summary: Get all users.
+      responses:
+        200:
+          description: it will retrieve all users details.
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - User
+      summary: Create user by admin
+      operationId: /createuser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSignup"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSignup"
+        "400":
+          description: Invalid username or password
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+  /user/stats:
+    get:
+      tags:
+        - User
+      operationId: /usersstats
+      summary: Get all users stats.
+      responses:
+        200:
+          description: it will retrieve all users count.
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - User
+      summary: Create user by admin
+      operationId: /createuserbyadmin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSignup"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSignup"
+        "400":
+          description: Invalid username or password
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+  /user/{userid}:
+    get:
+      tags:
+        - User
+      summary: Fetch details of a User.
+      parameters:
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: string
+          description: The unique id of the address.
+      responses:
+        200:
+          description: ok.
+        400:
+          description: Bad Request.
+      security:
+        - bearerAuth: []
+    put:
+      tags:
+        - User
+      summary: update user
+      operationId: updateUser
+      parameters:
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: string
+          description: The unique id of the user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSignup"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSignup"
+        "400":
+          description: Bad Request.
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - User
+      summary: delete user
+      operationId: deleteUser
+      parameters:
+        - in: path
+          name: userid
+          required: true
+          schema:
+            type: string
+          description: The unique id of the User.
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request.
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+
+
+  /auth/token:
+    post:
+      tags:
+        - Token
+      summary: "To obtain a {access_token, refresh_token} pair for accessing the API"
+      operationId: /auth/token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+        "400":
+          description: Invalid username or password
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+
+  /auth/token/refresh:
+    post:
+      tags:
+        - Token
+      summary: To refresh an expired (or not) access_token
+      operationId: /auth/token/refresh
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenRefreshRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+        "400":
+          description: Invalid refresh_token
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+  /auth/forgotpwd:
+    post:
+      tags:
+        - Token
+      summary: To request a forgotten password
+      operationId: /auth/forgotpwd
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForgotPasswordSuccessResponse"
+        "400":
+          description: Could not generate forgot password token.
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+  /auth/forgotpwd/reset:
+    post:
+      tags:
+        - Token
+      summary: To reset a forgotten password
+      operationId: /auth/forgotpwd/reset
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetForgotPasswordRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResetForgotPasswordSuccessResponse"
+        "400":
+          description: Could not change password.
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+
+  /files/upload/image:
+    post:
+      tags:
+        - Files
+      summary: "Upload image"
+      operationId: /files/upload/image
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ImageRequest"
+        required: true
+      responses:
+        "201":
+          description: Image upload successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageResponse"
+        "400":
+          description: Can not upload image. Error occured.
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+  /requests:
+    get:
+      tags:
+        - Requests
+      summary: Get all requests.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+      responses:
+        200:
+          description: ok.
+      security:
+        - bearerAuth: []
+    post:
+      tags:
+        - Requests
+      summary: Create new request.
+      operationId: request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestSchema"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestSchema"
+        "400":
+          description: Bad Request.
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+  /requests/{requestId}:
+    put:
+      tags:
+        - Requests
+      summary: update request
+      operationId: updateRequest
+      parameters:
+        - in: path
+          name: requestId
+          required: true
+          schema:
+            type: string
+          description: The unique id of the request.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RequestStatus"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RequestStatus"
+        "400":
+          description: Bad Request.
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+  /visitors:
+    get:
+      tags:
+        - Visitor
+      summary: Get all user requests(for mobile App).
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+        - in: query
+          name: offset
+          schema:
+            type: integer
+      responses:
+        200:
+          description: ok.
+      security:
+        - bearerAuth: []
+
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: Get all categories.
+      operationId: get categories
+      responses:
+        200:
+          description: Ok.
+      security:
+        - bearerAuth: []  
+    post:
+      tags:
+        - Categories
+      summary: Add category.
+      operationId: addCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategorySchema"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategorySchema"
+        "400":
+          description: Bad Request.
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+  /categories/{categoryId}/sub-categories:
+    get:
+      tags:
+        - Categories
+      summary: Fetch sub categories of a category.
+      operationId: getallsubcategories
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+          description: Parent category of current sub-category.
+      responses:
+        200:
+          description: Ok.
+      security:
+        - bearerAuth: []  
+    post:
+      tags:
+        - Categories
+      summary: Add sub category.
+      operationId: subcategory
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+          description: Parent category of current sub-category.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubCategorySchema"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubCategorySchema"
+        "400":
+          description: Bad Request.
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+  /adminchats/:
+    get:
+      tags:
+        - AdminChats
+      summary: Get all the chats of the current user
+      operationId: getAllChats
+      parameters:
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of records to skip.
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 50
+          description: Number of records to return.
+      responses:
+        "200":
+          description: OK
+          content: {}
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+      deprecated: false
+    post:
+      tags:
+        - AdminChats
+      summary: To start a chat between two users.
+      operationId: createChat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChat"
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+      deprecated: false
+  /adminchats/{chatId}:
+    delete:
+      tags:
+        - AdminChats
+      summary: To delete conversation historry.
+      operationId: deleteConversation
+      parameters:
+        - in: path
+          name: chatId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+      deprecated: false   
+  /adminchats/{chatId}/markasread:
+    post:
+      tags:
+        - AdminChats
+      summary: To start a chat between two users.
+      operationId: /chats/markasread
+      parameters:
+        - in: path
+          name: chatId
+          required: true
+          schema:
+            type: string  
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+      deprecated: false   
+  /adminchats/{chatId}/details:
+    get:
+      tags:
+        - AdminChats
+      summary: To get details of a chat between two users.
+      operationId: getChatDetailsById
+      parameters:
+        - in: path
+          name: chatId
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatDetails"
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+      deprecated: false
+  /adminchats/{chatId}/messages:
+    get:
+      tags:
+        - AdminChats
+      summary: To fetch all the messages of a chat between two users.
+      operationId: getAllChatMessages
+      parameters:
+        - in: path
+          name: chatId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+          description: Number of records to skip.
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 50
+          description: Number of records to return.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: string
+                  offset:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ChatTextMessage"
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "405":
+          description: Method not allowed
+          content: {}
+        "415":
+          description: Unsupported Media Type
+          content: {}
+      security:
+        - bearerAuth: []
+      deprecated: false 
+
+
+
+components:
+  schemas:
+    UserSignup:
+      type: object
+      properties:
+        personal_info:
+          type: object
+          properties:
+             name :
+               type: string
+             emirtates_id :
+               type: string
+             passport_no :
+               type: string
+             passport_expiry :
+               type: string
+             residence_visa :
+               type: string
+             visa_expiry :
+               type: string
+             nationality :
+               type: string
+        preferences:
+          type: object
+          properties:
+             preferred_language :
+               type: string
+             contact_mode :
+               type: string
+        contact_info:
+          type: object
+          properties:
+             primary_address :
+               type: string
+             secondary_address :
+               type: string
+             city :
+               type: string
+             po_box :
+               type: string
+             mobile_no :
+               type: string
+             email :
+               type: string
+             home_ph_no :
+               type: string
+             office_ph_no :
+               type: string
+             fax :
+               type: string
+             attendent_no :
+               type: string
+             attendent_name :
+               type: string
+    CreateChat:
+      type: object
+      properties:
+        member:
+          type: object
+          properties:
+            userid:
+              type: string
+              description: "The profile id"
+              example: "220"
+    SubCategorySchema:
+     type : object
+     properties:
+        name:
+          type: string
+    RequestSchema:
+     type : object
+     properties:
+        request_type:
+          type: string
+        category:
+          type: string
+        sub_category:
+          type: string
+        code:
+          type: string
+        email:
+          type: string
+        doc_name:
+          type: string
+        doc_url:
+          type: string
+        message:
+          type: string
+    CreateCategorySchema:
+     type : object
+     properties:
+        name:
+          type: string
+    RequestStatus:
+     type : object
+     properties:
+        status:
+          type: string
+
+    LoginRequest:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    AccessToken:
+      required:
+        - access_token
+        - refresh_token
+        - ttl
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        ttl:
+          type: integer
+          format: int64
+          description: Time in seconds for access_token expiry.
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+    ForgotPasswordSuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    ChatDetails:
+      type: object
+      properties:
+        _id:
+          type: string
+          maxLength: 24
+          example: "50112323873123a2g2321382"
+          description: "The id of the chat"
+        members:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                description: "The profile id"
+              email:
+                type: string
+                format: email
+              sport:
+                type: string
+                enum:
+                  - basketball
+                  - baseball
+              img:
+                type: string
+                format: uri
+              profile_type:
+                type: string
+                enum:
+                  - player
+                  - executive
+              full_name:
+                type: string
+          maxLength: 2
+          minLength: 2
+          description: "Profile id(s) of the two people having a chat."
+        t:
+          type: string
+          format: date-time
+          description: "The time when the chat was first created."
+    ResetForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        forgot_pwd_token:
+          type: string
+          minLength: 36
+          maxLength: 36
+        new_password:
+          type: string
+        confirm_new_password:
+          type: string
+    ChatTextMessage:
+      type: object
+      properties:
+        chat_id:
+          type: string
+          maxLength: 24
+          example: "50112323873123a2g2321382"
+          description: "The chat to which the message belongs."
+        from:
+          type: string
+          maxLength: 24
+          example: "50112323873123a2g2321382"
+          description: "The profile id of the user who sent the message."
+        to:
+          type: string
+          maxLength: 24
+          example: "50112323873123a2g2321382"
+          description: "The profile id of the user for whom the message is intended."
+        message:
+          type: string
+          minLength: 1
+          example: "Hello. This is a test message."
+          description: "The content of the message."
+        t:
+          type: string
+          format: date-time
+          description: "The time when the message was sent."
+      required:
+        - from
+        - to
+        - message
+    ResetForgotPasswordSuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+    ImageRequest:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            type: string
+            format: binary
+            maxItems: 4
+    ImageResponse:
+        type: array
+        items:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
