@@ -16,13 +16,13 @@ module.exports = {
 async function sendToEmail(name, to, subject, message, url) {
 
     var smtpConfig = {
-        host: 'smtp.mailgun.org',
-        port: 587,
-        secure: false,
-        auth: {
-            user: '',
-            pass: ''
-        }
+      host: "smtp.mailgun.org",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "postmaster@sandbox517bdacb18b24aa9940b52165a7bc888.mailgun.org",
+        pass: "a1d90d75b76874610d768de661e0250b-6d1c649a-b8b7374a",
+      },
     };
 
     var transporter = nodemailer.createTransport(smtpConfig);
@@ -50,13 +50,13 @@ async function sendToEmail(name, to, subject, message, url) {
 async function sendResetEmail(name, to, subject, message, url) {
 
     var smtpConfig = {
-        host: 'smtp.mailgun.org',
-        port: 587,
-        secure: false,
-        auth: {
-            user: '',
-            pass: ''
-        }
+      host: "smtp.mailgun.org",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "postmaster@sandbox517bdacb18b24aa9940b52165a7bc888.mailgun.org",
+        pass: "a1d90d75b76874610d768de661e0250b-6d1c649a-b8b7374a",
+      },
     };
 
     var transporter = nodemailer.createTransport(smtpConfig);

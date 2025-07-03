@@ -2,9 +2,10 @@ const AWS = require('aws-sdk');
 const url = require('../config.json');
 
 const config = {
-    accessKeyId: '',
-    secretAccessKey: '',
-    //region: 'us-east-1'
+  accessKeyId: "AKIAJFQATZWJ6Q3OCGMA",
+  secretAccessKey: "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",
+
+  //region: 'us-east-1'
 };
 
 module.exports = {
