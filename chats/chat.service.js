@@ -158,7 +158,9 @@ async function getChatMessages(chat_id, req) {
     console.log(
       "🚀 ~ getChatMessages ~ chatDetail:",
       chatDetail,
-      req.auth.userid
+      req.auth.userid,
+      String(chatDetail.members[1]) === req.auth.userid ||
+        String(chatDetail.members[0]) === req.auth.userid
     );
 
     if (chatDetail) {
@@ -199,7 +201,7 @@ async function getChatMessages(chat_id, req) {
             // { $limit: limit },
           ])
           .toArray();
-      
+
         console.log("messages", messages);
         if (messages.length > 0) {
           return messages;
@@ -387,6 +389,7 @@ async function getAllChats(req, profile) {
       req.query.offset,
       req.query.limit
     );
+    console.log("req,user", req.auth.userid);
     let docs = await client
       .db("wasl")
       .collection("chats")
@@ -509,7 +512,18 @@ async function getAllChats(req, profile) {
       .toArray();
 
     if (docs.length > 0) {
-      return docs;
+      const foundUser = await client
+        .db("wasl")
+        .collection("users")
+        .findOne({ _id: new ObjectId(req.auth.userid) });
+
+      if (foundUser) {
+        const checkDocs = docs.find(
+          (doc) => String(doc.members[0]?._id) === String(req.auth.userid)
+        );
+        if (checkDocs) return docs;
+        else return [];
+      } else return docs;
     } else {
       return [];
     }
