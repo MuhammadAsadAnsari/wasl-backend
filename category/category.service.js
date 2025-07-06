@@ -32,11 +32,11 @@ async function getCategories() {
             as: "sub_categories", // name of the joined array field
           },
         },
-        {
-          $match: {
-            "sub_categories.0": { $exists: true }, // Ensures sub_categories array is not empty
-          },
-        },
+        // {
+        //   $match: {
+        //     "sub_categories.0": { $exists: true }, // Ensures sub_categories array is not empty
+        //   },
+        // },
         {
           $project: {
             publish: 0,
@@ -211,7 +211,7 @@ async function createSubCategory(category_id, values) {
     var sub_category = await client.db('wasl').collection('sub_categories').insertOne(
       {
         name: values.name,
-        category_id: (category_id),
+        category_id: new ObjectId(category_id),
         publish: true
       }
     );ObjectId
