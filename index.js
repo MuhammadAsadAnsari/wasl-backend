@@ -28,11 +28,16 @@ app.use((req, res, next) => {
 
 // use JWT auth to secure the api
 
-app.use('/appuser', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./user/user.controller'));
 app.use('/auth', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./auth/token.controller'));
 
 
 app.use(jwtAuthenticate());
+app.use(
+  "/appuser",
+  bodyParser.urlencoded({ extended: false }),
+  bodyParser.json(),
+  require("./user/user.controller")
+);
 
 app.use('/categories', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./category/category.controller'));
 app.use('/property', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./property/property.controller'));

@@ -14,7 +14,7 @@ router.get("/:userid", verify, userDetails); //required
 router.delete("/:userid", verify, removeUser); //required
 router.put("/:userid", verify, updateUser); //required
 
-router.put("/password/reset/:id", verify, resetPassword);
+router.put("/password/reset", verify, resetPassword);
 
 
 
@@ -26,7 +26,7 @@ async function resetPassword(req, res,next) {
 
     if (!error) {
       try {
-        var result = await userService.resetPassword(req.params.id, value);
+        var result = await userService.resetPassword(req.auth.userid, value);
 
         if (!result.hasOwnProperty("error")) {
           res.json(result);

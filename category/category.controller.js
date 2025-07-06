@@ -8,6 +8,8 @@ const schema = require('./category.schemas');
 
 // routes
 router.get('/', verify, getCategories);
+router.get("/admin", verify, getCategoriesForAdmin);
+
 router.get('/sub', verify, getAllSubCategories);
 router.post('/', verify, createCategories);
 router.post('/:id/sub-categories', verify, createSubCategory);
@@ -29,6 +31,18 @@ async function getCategories(req, res, next) {
         res.status(400).json({ error: 'No categories exists' });
     }
     next();
+}
+
+async function getCategoriesForAdmin(req, res, next) {
+  var categories = await categoryService.getCategoriesForAdmin();
+
+  if (!categories.hasOwnProperty("error")) {
+    console.log(categories);
+    res.status(200).json(categories);
+  } else {
+    res.status(400).json({ error: "No categories exists" });
+  }
+  next();
 }
 
 async function getAllSubCategories(req, res, next) {

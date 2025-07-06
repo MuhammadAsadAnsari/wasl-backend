@@ -3,6 +3,8 @@ const offsetlimit = require("../helpers/offset-limit");
 const { ObjectId, Double, Int32 } = require("mongodb");
 const config = require("../config.json");
 const generateRandomPass = require("../helpers/random-pass");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const now = new Date();
 
@@ -13,7 +15,7 @@ module.exports = {
   userDetails,
   allUsers,
   usersStats,
-  resetPassword
+  resetPassword,
 };
 
 async function register(req, id) {
@@ -76,28 +78,27 @@ async function register(req, id) {
 
           if (result.insertedId) {
             var address = await client
-            .db("wasl")
-            .collection("addresses")
-            .insertOne({
-              floor : req.residence_info.floor,
-              flat_no : req.residence_info.flat_no,
-              building_name : req.residence_info.building_name,
-              user_id : result.insertedId.toString()
-            });
+              .db("wasl")
+              .collection("addresses")
+              .insertOne({
+                floor: req.residence_info.floor,
+                flat_no: req.residence_info.flat_no,
+                building_name: req.residence_info.building_name,
+                user_id: result.insertedId.toString(),
+              });
 
-            if(address.insertedId)
-            {
+            if (address.insertedId) {
               return {
                 message: "User has been created successfully.",
                 userId: result.insertedId,
               };
-            }else{
+            } else {
               return {
-                message: "User has been created successfully please add address.",
+                message:
+                  "User has been created successfully please add address.",
                 userId: result.insertedId,
               };
             }
-            
           } else {
             return {
               error: "Could not register user.",
@@ -191,12 +192,14 @@ async function updateExistingUser(values, id) {
     });
 
     if (user) {
-      user.personal_info.address = values.personal_info.address
-      user.personal_info.name= values.personal_info.name;
-      user.personal_info.phoneNumber =values.personal_info.phoneNumber;
+      user.personal_info.address = values.personal_info.address;
+      user.personal_info.name = values.personal_info.name;
+      user.personal_info.phoneNumber = values.personal_info.phoneNumber;
       user.personal_info.email = values.personal_info.email;
 
-      user.personal_info.image = values?.personal_info?.image?.split("uploads/")[1] || user?.personal_info?.image
+      user.personal_info.image =
+        values?.personal_info?.image?.split("uploads/")[1] ||
+        user?.personal_info?.image;
 
       const property = await client
         .db("wasl")
@@ -214,7 +217,7 @@ async function updateExistingUser(values, id) {
         );
 
       if (property) {
-        return { user: property.value, status :"success"};
+        return { user: property.value, status: "success" };
       } else {
         return {
           error: "User not updated",
@@ -247,120 +250,130 @@ async function removeUser(Id) {
 }
 
 async function usersStats() {
-    try {
-      const userStats = await client
-        .db("wasl")
-        .collection("users")
-        .aggregate([
-            {
-              '$group': {
-                '_id': 'app_settings.active', 
-                'all_users': {
-                  '$sum': 1
-                }, 
-                'active_users': {
-                  '$sum': {
-                    '$cond': {
-                      'if': '$app_settings.active', 
-                      'then': 1, 
-                      'else': 0
-                    }
-                  }
-                }, 
-                'block_users': {
-                  '$sum': {
-                    '$cond': {
-                      'if': '$app_settings.active', 
-                      'then': 0, 
-                      'else': 1
-                    }
-                  }
-                }
-              }
-            }, {
-              '$project': {
-                '_id': 0
-              }
-            }
-          ]).toArray();
-  
-      if (userStats.length > 0) {
-        return userStats;
-      } else {
-        return [];
-      }
-    } catch (error) {
-      return {
-        error: "Unexpected error occured. " + error,
-      };
-    }
-  }
-  async function resetPassword(userid, value) {
-    try {
-      let doc = await client
-        .db("wasl")
-        .collection("users")
-        .findOne({ _id: ObjectId(userid) });
-      console.log(doc);
-      if (value.new_password == value.confirm_password) {
-        if (doc && (await bcrypt.compare(value.old_password, doc.password))) {
-          let result = await client
-            .db("wasl")
-            .collection("users")
-            .updateOne(
-              {
-                _id: ObjectId(userid),
+  try {
+    const userStats = await client
+      .db("wasl")
+      .collection("users")
+      .aggregate([
+        {
+          $group: {
+            _id: "app_settings.active",
+            all_users: {
+              $sum: 1,
+            },
+            active_users: {
+              $sum: {
+                $cond: {
+                  if: "$app_settings.active",
+                  then: 1,
+                  else: 0,
+                },
               },
-              {
-                $set: {
+            },
+            block_users: {
+              $sum: {
+                $cond: {
+                  if: "$app_settings.active",
+                  then: 0,
+                  else: 1,
+                },
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+          },
+        },
+      ])
+      .toArray();
+
+    if (userStats.length > 0) {
+      return userStats;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    return {
+      error: "Unexpected error occured. " + error,
+    };
+  }
+}
+async function resetPassword(userid, value) {
+  console.log("🚀 ~ resetPassword ~ userid:", userid);
+  try {
+    let doc = await client
+      .db("wasl")
+      .collection("users")
+      .findOne({ _id: ObjectId(userid) });
+
+    const comparePassword = await bcrypt.compare(
+      value.old_password,
+      doc.app_settings.password
+    );
+    if (value.new_password == value.confirm_password) {
+      if (doc && comparePassword) {
+        let result = await client
+          .db("wasl")
+          .collection("users")
+          .updateOne(
+            {
+              _id: ObjectId(userid),
+            },
+            {
+              $set: {
+                app_settings: {
                   password: await bcrypt.hash(
                     value.new_password,
                     await bcrypt.genSalt(10)
                   ),
                 },
-              }
-            );
-
-          const token = jwt.sign(
-            {
-              userid: doc._id,
-            },
-            config.secret
-          );
-          if (result.modifiedCount == 1) {
-            return {
-              status: "success",
-              message:
-                "Your password has been changed successfully. Please login with your new credentials.",
-
-              data: {
-                user: {
-                  _id: foundUser?._id,
-                  address: foundUser?.personal_info.address,
-                  name: foundUser?.personal_info.name,
-                  email: foundUser?.personal_info.email,
-                  image: foundUser?.personal_info.image,
-                  phoneNumber: foundUser?.personal_info.phoneNumber,
-                  role: foundUser?.personal_info.role,
-                },
               },
-              token,
-            };
-          }
-        } else {
+            }
+          );
+
+        console.log("result", result, result.modifiedCount, doc._id);
+        const token = jwt.sign(
+          {
+            userid: doc._id,
+          },
+          config.secret
+        );
+        console.log("🚀 ~ resetPassword ~ token:", token);
+        if (result.modifiedCount == 1) {
           return {
-            error: "Could not change abc.",
+            status: "success",
+            message:
+              "Your password has been changed successfully. Please login with your new credentials.",
+
+            data: {
+              user: {
+                _id: doc?._id,
+                address: doc?.personal_info.address || "",
+                name: doc?.personal_info?.name || "",
+                email: doc?.personal_info?.email || "",
+                image: doc?.personal_info?.image || "default.png",
+                phoneNumber: doc?.personal_info?.phoneNumber || "",
+                role: doc?.personal_info?.role || "user",
+              },
+            },
+            token,
           };
         }
       } else {
         return {
-          error: "Password missmatch",
+          error: "Could not change abc.",
         };
       }
-    } catch (e) {
+    } else {
       return {
-        error: "Could not change password.",
+        error: "Password missmatch",
       };
     }
+  } catch (e) {
+    return {
+      error: "Could not change password.",
+    };
   }
-  
+}

@@ -8,7 +8,8 @@ module.exports = {
   getSubCategoriesByCategoryId,
   createCategory,
   createSubCategory,
-  getAllSubCategories
+  getAllSubCategories,
+  getCategoriesForAdmin,
 };
 
 // verified this is working
@@ -62,6 +63,36 @@ async function getCategories() {
   }
 
 
+}
+
+async function getCategoriesForAdmin() {
+  try {
+    const categories = await client
+      .db("wasl")
+      .collection("categories")
+      .aggregate([
+       
+        {
+          $project: {
+            publish: 0,
+          },
+        },
+      ])
+      .toArray();
+
+    if (categories.length > 0) {
+      return {
+        categories: categories,
+      };
+    } else {
+      return {
+        categories: [],
+      };
+    }
+  } catch (e) {
+    console.log(e);
+    return { error: "No categories exist" };
+  }
 }
 async function getAllSubCategories() {
   try {
