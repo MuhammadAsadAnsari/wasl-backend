@@ -13,7 +13,7 @@ router.post("/token", authenticateAdmin);
 
 router.put("/token/upgrade", verify, upgradeToken);
 router.post("/user-signup", userSignup);
-
+router.post("/add-providers",verify,addProviders)
 router.post("/token/refresh", refreshToken);
 router.post("/forgotpwd", forgotPassword);
 router.get("/forgetpassword", forgetPassProcess);
@@ -132,6 +132,54 @@ async function userSignup(req, res, next) {
     if (!error) {
       try {
         var result = await tokenService.userSignup(req.body);
+
+        if (result.hasOwnProperty("error")) {
+          res.status(400).json(result);
+        } else {
+          res.status(200).json(result);
+        }
+      } catch (e) {
+        console.log(e);
+
+        if (err.name === "MongoError") {
+          res.status(503).json({
+            error: "Service unavailabe. Please try again.",
+          });
+        }
+      }
+    } else {
+      // res.status(400).json({ error: error.message.toString().replace('\"', "").replace('\"', "") });
+      // res.status(400).json({ error : JSON.parse(error.message) });
+
+      if (
+        errorMsgs.login[error.details[0].context.key][error.details[0].type] !==
+        undefined
+      ) {
+        res.status(400).json({
+          error:
+            errorMsgs.login[error.details[0].context.key][
+              error.details[0].type
+            ],
+        });
+      } else {
+        res.status(400).json({ error: errorMsgs.default });
+      }
+    }
+  } catch (error) {
+    res.status(400).json({ error: errorMsgs.default });
+  }
+  next();
+}
+
+
+async function addProviders(req, res, next) {
+  try {
+    const { error, value } = schema.addProviderSchema.validate(req.body);
+    console.log("🚀 ~ addProviders ~ value:", value)
+
+    if (!error) {
+      try {
+        var result = await tokenService.addProviders(value);
 
         if (result.hasOwnProperty("error")) {
           res.status(400).json(result);

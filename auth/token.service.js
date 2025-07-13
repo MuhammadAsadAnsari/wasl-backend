@@ -21,7 +21,7 @@ module.exports = {
   forgotPasswordPhone,
   verifyForgotPhoneNumber,
   resetForgotPasswordPhone,
- 
+  addProviders,
   logout,
   authenticateAdmin,
   userSignup,
@@ -158,11 +158,11 @@ async function authenticate({ email, password }) {
         data: {
           user: {
             _id: foundUser?._id,
-            address:foundUser?.personal_info.address,
+            address: foundUser?.personal_info.address,
             name: foundUser?.personal_info.name,
             email: foundUser?.personal_info.email,
             image: foundUser?.personal_info.image,
-            phoneNumber :foundUser?.personal_info.phoneNumber,
+            phoneNumber: foundUser?.personal_info.phoneNumber,
             role: foundUser?.personal_info.role,
           },
         },
@@ -552,7 +552,6 @@ async function resetForgotPasswordPhone({
  *       *   ELSE Reject the request.
  */
 
-
 async function thirdPartyLogin(data, token, device_token) {
   let userRecord = await client
     .db("wasl")
@@ -754,6 +753,24 @@ async function logout(userid, req) {
   }
 }
 
+async function addProviders(body) {
+  const { personal_info, preferences, contact_info } = body;
+  console.log("🚀 ~ addProviders ~ personal_info:", personal_info)
+
+    const usersCollection = client.db("wasl").collection("users");
+  
+  const newUser = await usersCollection.insertOne({
+    personal_info,
+    preferences,
+    contact_info,
+  });
+
+  return {
+    status: "success",
+    message: "service provider has been added successfully",
+    user:newUser
+  };
+}
 emitter.on("create_stripe_customer", async (user_id) => {
   try {
     const customer = await stripe.customers.create({

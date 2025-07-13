@@ -5,6 +5,6 @@
     "host_name_local": "127.0.0.1",
     "port": "30001",
     "HTTP": "http://",
-    "URL":"https://127.0.0.1:30000/",
+    "URL":"https://127.0.0.1:30001/",
     "JWT_expire_time" : "100000000000s"
 }

@@ -135,7 +135,7 @@ async function allUsers() {
     const users = await client
       .db("wasl")
       .collection("users")
-      .find()
+      .find({"personal_info.role":"serviceProvider"})
       .sort({ _id: -1 })
       .toArray();
 

@@ -49,5 +49,13 @@
   },
   "directories": {
     "doc": "docs"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MuhammadAsadAnsari/wasl-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MuhammadAsadAnsari/wasl-backend/issues"
+  },
+  "homepage": "https://github.com/MuhammadAsadAnsari/wasl-backend#readme"
 }
