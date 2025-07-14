@@ -516,12 +516,14 @@ async function getAllChats(req, profile) {
         .db("wasl")
         .collection("users")
         .findOne({ _id: new ObjectId(req.auth.userid) });
+        console.log("🚀 ~ getAllChats ~ foundUser:", foundUser)
 
       if (foundUser) {
-        const checkDocs = docs.find(
+        const checkDocs = docs.filter(
           (doc) => String(doc.members[0]?._id) === String(req.auth.userid)
         );
-        if (checkDocs) return docs;
+        console.log("🚀 ~ getAllChats ~ checkDocs:", checkDocs)
+        if (checkDocs) return checkDocs;
         else return [];
       } else return docs;
     } else {
