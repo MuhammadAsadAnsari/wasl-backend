@@ -30,6 +30,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./auth/token.controller'));
 
+app.use('/files', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./files/files.controller'));
 
 app.use(jwtAuthenticate());
 app.use(
@@ -43,7 +44,6 @@ app.use('/categories', bodyParser.urlencoded({ extended: false }), bodyParser.js
 app.use('/property', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./property/property.controller'));
 app.use('/userrequests', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./requests/requests.controller'));
 app.use('/services', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./services/services.controller'));
-app.use('/files', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./files/files.controller'));
 app.use('/adminchats', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./chats/chat.controller.js'));
 app.use('/visitors', bodyParser.urlencoded({ extended: false }), bodyParser.json(), require('./visitor/visitor.controller.js'));
 
